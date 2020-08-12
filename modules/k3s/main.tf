@@ -7,8 +7,8 @@ resource "null_resource" "k3s_first_node" {
     connection {
       type     = "ssh"
       host     = var.first_node_ip
-      user     = "packerbuilt"
-      password = "PackerBuilt!"
+      user     = var.host_username
+      password = var.host_password
     }
   }
 }
@@ -24,8 +24,8 @@ resource "null_resource" "k3s_subsequent_nodes" {
     connection {
       type     = "ssh"
       host     = element("${var.subsequent_node_ips}", count.index)
-      user     = "packerbuilt"
-      password = "PackerBuilt!"
+      user     = var.host_username
+      password = var.host_password
     }
   }
   depends_on = [null_resource.k3s_first_node]

@@ -27,6 +27,9 @@ module "nodes" {
   lb_netmask    = var.lb_netmask
   lb_gateway    = var.lb_gateway
   lb_dns        = var.lb_dns
+
+  host_username       = var.host_username
+  host_password       = var.host_password
 }
 
 
@@ -36,6 +39,8 @@ module "k3s" {
   subsequent_node_ips = slice("${module.nodes.instance_ip_addr}", 1, length("${module.nodes.instance_ip_addr}"))
   k3s_secret          = var.k3s_secret
   lb_address          = "${module.nodes.lb_addr}"
+  host_username       = var.host_username
+  host_password       = var.host_password
 
   depends_on = [module.nodes]
 }

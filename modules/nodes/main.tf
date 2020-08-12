@@ -118,9 +118,8 @@ resource "vsphere_virtual_machine" "k3s-lb" {
     connection {
       type     = "ssh"
       host     = self.default_ip_address
-      user     = "packerbuilt"
-      password = "PackerBuilt!"
+      user     = var.host_username
+      password = var.host_password
     }
   }
 }
-

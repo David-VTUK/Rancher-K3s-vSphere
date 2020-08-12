@@ -26,3 +26,5 @@ variable lb_gateway {}
 variable lb_address {}
 variable lb_dns {}
 
+variable host_username {}
+variable host_password {}
