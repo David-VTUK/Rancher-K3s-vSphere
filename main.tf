@@ -28,8 +28,8 @@ module "nodes" {
   lb_gateway    = var.lb_gateway
   lb_dns        = var.lb_dns
 
-  host_username       = var.host_username
-  host_password       = var.host_password
+  host_username = var.host_username
+  host_password = var.host_password
 }
 
 
@@ -57,3 +57,18 @@ module "rancher" {
 
   depends_on = [module.k3s]
 }
+
+resource "null_resource" "wait_for_rancher" {
+  provisioner "local-exec" {
+    command = <<EOF
+            while [ "$${resp}" != "pong" ]; do
+                resp=$(curl -sSk -m 2 "https://$${rancher_hostname}/ping")
+                echo "Rancher Response: $${resp}"
+                if [ "$${resp}" != "pong" ]; then
+                  sleep 10
+                fi
+            done
+              EOF
+  }
+}
+
