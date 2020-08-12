@@ -70,5 +70,7 @@ resource "null_resource" "wait_for_rancher" {
             done
               EOF
   }
+
+  depends_on = [module.rancher]
 }
 
