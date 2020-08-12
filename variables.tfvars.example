@@ -1,0 +1,37 @@
+vsphere_server     = "172.16.10.22"
+vsphere_user       = "administrator@vsphere.local"
+vsphere_password   = "SomePassword"
+vsphere_datacenter = "Homelab"
+vsphere_cluster    = "MGMT"
+vsphere_network    = "VDS-MGMT-DEFAULT"
+
+vm_prefix     = "k3s-ranch-node-"
+vm_count      = "3"
+vm_datastore  = "ds1"
+vm_cpucount   = "4"
+vm_memory     = "4096"
+vm_domainname = "somedomain.co.uk"
+vm_network    = "172.16.10."
+vm_netmask    = "24"
+vm_gateway    = "172.16.10.1"
+vm_dns        = "172.16.10.30"
+
+lb_address    = "172.16.10.110"
+lb_prefix     = "k3s-ranch-lb"
+lb_datastore  = "ds1"
+lb_cpucount   = "1"
+lb_memory     = "1024"
+lb_domainname = "somedomain.co.uk"
+lb_netmask    = "24"
+lb_gateway    = "172.16.10.1"
+lb_dns        = "172.16.10.30"
+
+k3s_secret = "S87sd6f7od87D96Fd"
+
+certmanager_version = "0.15.0"
+
+rancher_hostname    = "rancher.somedomain.co.uk"
+rancher_version     = "2.4.5"
+
+host_username = "packerbuilt"
+host_password      = "PackerBuilt!"
