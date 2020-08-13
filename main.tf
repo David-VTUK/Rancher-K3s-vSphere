@@ -61,13 +61,7 @@ module "rancher" {
 resource "null_resource" "wait_for_rancher" {
   provisioner "local-exec" {
     command = <<EOF
-            while [ "$${resp}" != "pong" ]; do
-                resp=$(curl -sSk -m 2 "https://$${rancher_hostname}/ping")
-                echo "Rancher Response: $${resp}"
-                if [ "$${resp}" != "pong" ]; then
-                  sleep 10
-                fi
-            done
+      while true; do curl -kv https://"${var.rancher_hostname}" 2>&1 | grep -q "dynamiclistener-ca"; if [ $? != 0 ]; then echo "Rancher isn't ready yet"; sleep 5; continue; fi; break; done; echo "Rancher is Ready";
               EOF
   }
 
