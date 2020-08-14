@@ -10,6 +10,8 @@ This repo creates the following:
 
 # Prerequisites
 
+* Terraform 0.13
+
 * Prior to running this script, a DNS record needs to be created to point at the Loadbalancer IP address, defined in the variable `lb_address`.
 
 * The VM template used must have the `Cloud-Init Datasource for VMware GuestInfo` project installed, which facilitates pulling meta, user, and vendor data from VMware vSphere's GuestInfo interface. This can be achieved with:
