@@ -38,3 +38,8 @@ Outputs:
 
 rancher_url = https://rancher.virtualthoughts.co.uk
 ```
+# Acquire Kubeconfig
+
+* SSH to one of the K3s nodes
+* Grab `/etc/rancher/k3s/k3s.yaml`
+* Replace `server: https://127.0.0.1:6443` with the IP address defined in `lb_address`
