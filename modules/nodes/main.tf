@@ -26,7 +26,7 @@ data "vsphere_datastore" "datastore" {
 }
 
 data "vsphere_virtual_machine" "template" {
-  name          = "template_ubuntu2004"
+  name          = var.vm_template
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 

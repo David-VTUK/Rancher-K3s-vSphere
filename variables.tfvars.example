@@ -15,6 +15,7 @@ vm_network    = "172.16.10."
 vm_netmask    = "24"
 vm_gateway    = "172.16.10.1"
 vm_dns        = "172.16.10.30"
+vm_template   = "my_template_name"
 
 lb_address    = "172.16.10.110"
 lb_prefix     = "k3s-ranch-lb"

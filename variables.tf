@@ -78,6 +78,11 @@ variable vm_dns {
   description = "IP address of DNS server"
 }
 
+variable vm_template {
+  type        = string
+  description = "Name of VM template to use"
+}
+
 variable lb_address {
   type        = string
   description = "IP address for the NGINX loadbalancer"

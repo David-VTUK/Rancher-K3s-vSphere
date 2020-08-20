@@ -17,6 +17,7 @@ module "nodes" {
   vm_netmask    = var.vm_netmask
   vm_gateway    = var.vm_gateway
   vm_dns        = var.vm_dns
+  vm_template   = var.vm_template
 
   lb_address    = var.lb_address
   lb_prefix     = var.lb_prefix
