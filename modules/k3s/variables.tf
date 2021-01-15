@@ -17,12 +17,12 @@ variable lb_address {
   description = "IP address for the NGINX loadbalancer"
 }
 
-variable host_username {
+variable vm_ssh_key {
   type        = string
-  description = "FQDN or IP address of vCenter Instance"
+  description = "SSH key to add to the cloud-init for user access"
 }
 
-variable host_password {
+variable vm_ssh_user {
   type        = string
-  description = "FQDN or IP address of vCenter Instance"
+  description = "SSH key to add to the cloud-init for user access"
 }

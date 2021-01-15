@@ -1,31 +1,41 @@
-resource "null_resource" "install_rancher" {
+resource "helm_release" "rancher" {
+  name       = "rancher"
+  repository = "https://releases.rancher.com/server-charts/latest" 
+  chart      = "rancher"
+  version    = var.rancher_version
+  namespace  = "cattle-system"
 
-  provisioner "file" {
-    content = templatefile("${path.module}/templates/install.sh.tpl", {
-      certmanager_version = var.certmanager_version
-      rancher_hostname    = var.rancher_hostname
-      rancher_version     = var.rancher_version
-    })
-    destination = "/tmp/installrancher.sh"
-
-    connection {
-      type     = "ssh"
-      host     = var.host
-      user     = var.host_username
-      password = var.host_password
-    }
+  set {
+    name  = "hostname"
+    value = var.rancher_hostname
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo sh /tmp/installrancher.sh"
-    ]
+  depends_on = [helm_release.cert-manager]
+}
 
-    connection {
-      type     = "ssh"
-      host     = var.host
-      user     = var.host_username
-      password = var.host_password
-    }
+resource "helm_release" "cert-manager" {
+  name       = "cert-manager"
+  repository = "https://charts.jetstack.io" 
+  chart      = "cert-manager"
+  version    = var.certmanager_version
+  namespace  = "cert-manager"
+
+  depends_on = [null_resource.cert-manager-prereqs]
+}
+
+
+resource "null_resource" "cert-manager-prereqs" {
+
+  provisioner "local-exec" {
+    command = "kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v0.15.0/cert-manager.crds.yaml --kubeconfig=kube_config_cluster.yml"
+  }
+
+    provisioner "local-exec" {
+    command = "kubectl create ns cattle-system --kubeconfig=kube_config_cluster.yml"
+  }
+
+    provisioner "local-exec" {
+    command = "kubectl create ns cert-manager --kubeconfig=kube_config_cluster.yml"
   }
 }
+

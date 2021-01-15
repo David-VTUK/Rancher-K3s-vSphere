@@ -29,32 +29,30 @@ module "nodes" {
   lb_gateway    = var.lb_gateway
   lb_dns        = var.lb_dns
 
-  host_username = var.host_username
-  host_password = var.host_password
+  vm_ssh_key = var.vm_ssh_key
+  vm_ssh_user = var.vm_ssh_user
 }
 
 
 module "k3s" {
   source              = "./modules/k3s"
-  first_node_ip       = element("${module.nodes.instance_ip_addr}", 0)
-  subsequent_node_ips = slice("${module.nodes.instance_ip_addr}", 1, length("${module.nodes.instance_ip_addr}"))
+  first_node_ip       = element(module.nodes.instance_ip_addr, 0)
+  subsequent_node_ips = slice(module.nodes.instance_ip_addr, 1, length(module.nodes.instance_ip_addr))
   k3s_secret          = var.k3s_secret
-  lb_address          = "${module.nodes.lb_addr}"
-  host_username       = var.host_username
-  host_password       = var.host_password
+  lb_address          = module.nodes.lb_addr
+  vm_ssh_key = var.vm_ssh_key
+  vm_ssh_user = var.vm_ssh_user
 
   depends_on = [module.nodes]
 }
 
 module "rancher" {
   source              = "./modules/rancher"
+
   certmanager_version = var.certmanager_version
   rancher_hostname    = var.rancher_hostname
   rancher_version     = var.rancher_version
 
-  host          = element("${module.nodes.instance_ip_addr}", 0)
-  host_username = var.host_username
-  host_password = var.host_password
 
   depends_on = [module.k3s]
 }
@@ -69,3 +67,33 @@ resource "null_resource" "wait_for_rancher" {
   depends_on = [module.rancher]
 }
 
+provider "helm" {
+  kubernetes {
+    config_path = "./kube_config_cluster.yml"
+  }
+}
+
+provider "kubernetes" {
+  config_path = "./kube_config_cluster.yml"
+}
+
+provider "rancher2" {
+  alias = "rancher-b"
+  api_url   = "https://${var.rancher_hostname}"
+  bootstrap = true
+  insecure = true
+}
+# Bootstrap rancher setup
+resource "rancher2_bootstrap" "rancher-admin" {
+  provider = rancher2.rancher-b
+  password = var.rancher_password
+  telemetry = true
+  depends_on = [null_resource.wait_for_rancher]
+}
+# Create actual admin rancher setup
+provider "rancher2" {
+  alias = "rancher-a"
+  api_url = "https://${var.rancher_hostname}"
+  token_key = rancher2_bootstrap.rancher-admin.token
+  insecure = true
+}

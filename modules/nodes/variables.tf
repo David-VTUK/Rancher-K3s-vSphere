@@ -83,6 +83,15 @@ variable vm_template {
   description = "Name of VM template to use"
 }
 
+variable vm_ssh_key {
+  type        = string
+  description = "SSH key to add to the cloud-init for user access"
+}
+
+variable vm_ssh_user {
+  type        = string
+  description = "SSH key to add to the cloud-init for user access"
+}
 variable lb_address {
   type        = string
   description = "IP address for the NGINX loadbalancer"

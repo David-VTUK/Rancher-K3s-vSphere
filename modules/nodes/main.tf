@@ -63,6 +63,12 @@ resource "vsphere_virtual_machine" "k3s-nodes" {
     }))
 
     "guestinfo.metadata.encoding" = "base64"
+
+    "guestinfo.userdata" = base64encode(templatefile("${path.module}/templates/userdata.yml.tpl", {
+      vm_ssh_user = var.vm_ssh_user,
+      vm_ssh_key = var.vm_ssh_key
+    }))
+    "guestinfo.userdata.encoding" = "base64"
   }
 }
 
@@ -98,14 +104,12 @@ resource "vsphere_virtual_machine" "k3s-lb" {
 
     "guestinfo.metadata.encoding" = "base64"
 
-
-    "guestinfo.userdata" = base64encode(templatefile("${path.module}/templates/userdata.yml.tpl", {
+    "guestinfo.userdata" = base64encode(templatefile("${path.module}/templates/userdata-lb.yml.tpl", {
       servers = vsphere_virtual_machine.k3s-nodes.*.default_ip_address
+      vm_ssh_user = var.vm_ssh_user,
+      vm_ssh_key = var.vm_ssh_key
     }))
     "guestinfo.userdata.encoding" = "base64"
-
-
-
   }
 
   provisioner "remote-exec" {
@@ -118,8 +122,8 @@ resource "vsphere_virtual_machine" "k3s-lb" {
     connection {
       type     = "ssh"
       host     = self.default_ip_address
-      user     = var.host_username
-      password = var.host_password
+      user     = var.vm_ssh_user
+      private_key = file("~/.ssh/id_rsa")
     }
   }
 }

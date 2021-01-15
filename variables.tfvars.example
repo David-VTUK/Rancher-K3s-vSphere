@@ -33,6 +33,4 @@ certmanager_version = "0.15.0"
 
 rancher_hostname    = "rancher.somedomain.co.uk"
 rancher_version     = "2.4.5"
-
-host_username = "packerbuilt"
-host_password      = "PackerBuilt!"
+rancher_password    = "admin"
