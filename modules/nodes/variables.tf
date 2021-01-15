@@ -136,13 +136,3 @@ variable lb_dns {
   type        = string
   description = "DNS Server for the Loadbalancer VM"
 }
-
-variable host_username {
-  type        = string
-  description = "FQDN or IP address of vCenter Instance"
-}
-
-variable host_password {
-  type        = string
-  description = "FQDN or IP address of vCenter Instance"
-}

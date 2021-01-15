@@ -32,6 +32,9 @@ resource "null_resource" "k3s_subsequent_nodes" {
 }
 
 resource "null_resource" "k3s_kubeconfig" {
+  triggers = {
+    always_run = timestamp()
+  }
   provisioner "local-exec" {
     command = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_rsa ${var.vm_ssh_user}@${var.first_node_ip}:/etc/rancher/k3s/k3s.yaml ./kube_config_cluster.yml"
   }
