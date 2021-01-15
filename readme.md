@@ -38,7 +38,7 @@ Outputs:
 
 rancher_url = https://rancher.virtualthoughts.co.uk
 ```
-# Acquire Kubeconfig
+# Acquire Kubeconfig manually
 
 * SSH to one of the K3s nodes
 * Grab `/etc/rancher/k3s/k3s.yaml`
