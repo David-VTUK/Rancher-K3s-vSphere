@@ -56,7 +56,7 @@ resource "vsphere_virtual_machine" "k3s-nodes" {
 
   extra_config = {
     "guestinfo.metadata" = base64encode(templatefile("${path.module}/templates/metadata.yml.tpl", {
-      node_ip       = "${var.vm_network}${count.index + 100}/${var.vm_netmask}",
+      node_ip       = "${var.vm_network}${count.index + var.vm_startip}/${var.vm_netmask}",
       node_gateway  = var.vm_gateway,
       node_dns      = var.vm_dns,
       node_hostname = "${var.vm_prefix}${count.index + 1}"

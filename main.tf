@@ -13,6 +13,7 @@ module "nodes" {
   vm_cpucount   = var.vm_cpucount
   vm_memory     = var.vm_memory
   vm_domainname = var.vm_domainname
+  vm_startip    = var.vm_startip
   vm_network    = var.vm_network
   vm_netmask    = var.vm_netmask
   vm_gateway    = var.vm_gateway

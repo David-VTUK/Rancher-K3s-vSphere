@@ -38,6 +38,12 @@ variable vm_count {
   description = "Number of K3s instances to create"
 }
 
+variable vm_startip {
+  type        = number
+  description = "Last octet of ip to start from"
+}
+
+
 variable vm_datastore {
   type        = string
   description = "Name of the vCenter datastore object"

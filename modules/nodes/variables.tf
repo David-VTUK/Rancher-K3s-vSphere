@@ -63,6 +63,11 @@ variable vm_network {
   description = "CIDR network to use with appended . IE - 172.16.10."
 }
 
+variable vm_startip {
+  type        = number
+  description = "Last octet of ip to start from"
+}
+
 variable vm_netmask {
   type        = string
   description = "Subnet Mask length for VM's"

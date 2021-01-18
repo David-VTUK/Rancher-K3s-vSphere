@@ -13,6 +13,12 @@ resource "null_resource" "k3s_first_node" {
   }
 }
 
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [null_resource.k3s_first_node]
+
+  create_duration = "30s"
+}
+
 resource "null_resource" "k3s_subsequent_nodes" {
 
   count = length(var.subsequent_node_ips)
@@ -28,7 +34,7 @@ resource "null_resource" "k3s_subsequent_nodes" {
       private_key = file("~/.ssh/id_rsa")
     }
   }
-  depends_on = [null_resource.k3s_first_node]
+  depends_on = [time_sleep.wait_30_seconds]
 }
 
 resource "null_resource" "k3s_kubeconfig" {
