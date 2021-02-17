@@ -7,10 +7,16 @@ resource "null_resource" "k3s_first_node" {
     connection {
       type     = "ssh"
       host     = var.first_node_ip
-      user     = var.host_username
-      password = var.host_password
+      user     = var.vm_ssh_user
+      private_key = file("~/.ssh/id_rsa")
     }
   }
+}
+
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [null_resource.k3s_first_node]
+
+  create_duration = "30s"
 }
 
 resource "null_resource" "k3s_subsequent_nodes" {
@@ -23,11 +29,28 @@ resource "null_resource" "k3s_subsequent_nodes" {
 
     connection {
       type     = "ssh"
-      host     = element("${var.subsequent_node_ips}", count.index)
-      user     = var.host_username
-      password = var.host_password
+      host     = element(var.subsequent_node_ips, count.index)
+      user     = var.vm_ssh_user
+      private_key = file("~/.ssh/id_rsa")
     }
   }
-  depends_on = [null_resource.k3s_first_node]
+  depends_on = [time_sleep.wait_30_seconds]
+}
+
+resource "null_resource" "k3s_kubeconfig" {
+  triggers = {
+    always_run = timestamp()
+  }
+  provisioner "local-exec" {
+    command = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_rsa ${var.vm_ssh_user}@${var.first_node_ip}:/etc/rancher/k3s/k3s.yaml ./kube_config_cluster.yml"
+  }
+  depends_on = [null_resource.k3s_subsequent_nodes]
+}
+
+resource "null_resource" "k3s_kubeconfig_rewrite" {
+  provisioner "local-exec" {
+    command = "sed -i 's/127.0.0.1/${var.first_node_ip}/g' ./kube_config_cluster.yml"
+  }
+  depends_on = [null_resource.k3s_kubeconfig]
 }
 

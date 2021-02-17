@@ -38,6 +38,12 @@ variable vm_count {
   description = "Number of K3s instances to create"
 }
 
+variable vm_startip {
+  type        = number
+  description = "Last octet of ip to start from"
+}
+
+
 variable vm_datastore {
   type        = string
   description = "Name of the vCenter datastore object"
@@ -148,12 +154,17 @@ variable rancher_version {
   description = "Version of Rancher to install"
 }
 
-variable host_username {
+variable rancher_password {
   type        = string
-  description = "SSH username for the VM's"
+  description = "Bootstrap password for Rancher admin account"
 }
 
-variable host_password {
+variable vm_ssh_key {
   type        = string
-  description = "SSH password for the VM's"
+  description = "SSH key to add to the cloud-init for user access"
+}
+
+variable vm_ssh_user {
+  type        = string
+  description = "Username for ssh access"
 }

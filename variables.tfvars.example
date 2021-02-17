@@ -12,10 +12,13 @@ vm_cpucount   = 4
 vm_memory     = 4096
 vm_domainname = "somedomain.co.uk"
 vm_network    = "172.16.10."
+vm_startip    = 100
 vm_netmask    = "24"
 vm_gateway    = "172.16.10.1"
 vm_dns        = "172.16.10.30"
 vm_template   = "my_template_name"
+vm_ssh_key    = "ssh-rsa your-very-long-pubkey-string"
+vm_ssh_user   = "ubuntu"
 
 lb_address    = "172.16.10.110"
 lb_prefix     = "k3s-ranch-lb"
@@ -33,6 +36,4 @@ certmanager_version = "0.15.0"
 
 rancher_hostname    = "rancher.somedomain.co.uk"
 rancher_version     = "2.4.5"
-
-host_username = "packerbuilt"
-host_password      = "PackerBuilt!"
+rancher_password    = "admin"
